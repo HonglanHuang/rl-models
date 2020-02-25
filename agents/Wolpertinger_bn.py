@@ -14,7 +14,7 @@ import gym
 # rl model
 import tensorflow as tf
 from tensorflow.keras import Model
-from tensorflow.keras.layers import Dense, ReLU, Input, concatenate
+from tensorflow.keras.layers import Dense, ReLU, LeakyReLU, Input, concatenate, BatchNormalization
 from tensorflow.keras.losses import MeanSquaredError
 
 # OU Noise
@@ -23,7 +23,10 @@ from OU_noise import OUNoise
 # hyper
 LEGAL_ACTION_CONSTRAINT = False
 
-class wolp_agent:
+LOG_DIR = './logs/'
+CRITIC_CALLBACK = tf.keras.callbacks.TensorBoard(log_dir=LOG_DIR, histogram_freq=1)
+
+class wolp_bn_agent:
     def __init__(self,
                  state_dim,
                  action_dim,
@@ -62,9 +65,10 @@ class wolp_agent:
 
         # initialize variables
         self.sess.run(tf.global_variables_initializer())
+
         # save graoh
-        if save_graph:
-            tf.summary.FileWriter('./logs/', self.sess.graph)
+        # if save_graph:
+            # self.writer = tf.summary.FileWriter(LOG_DIR, self.sess.graph)
 
         # record the learning steps
         self.learning_step = 0
@@ -140,10 +144,12 @@ class wolp_agent:
 
         proto_actions = self.Actor.forward(states)
         action_grads = self.Critic.get_action_grads(states, proto_actions)  # actor are updated wrt to proto action
+        # summary = self.Actor.train(states, action_grads)
         self.Actor.train(states, action_grads)
 
         # learning counter
         self.learning_step += 1
+        # self.writer.add_summary(summary, self.learning_step)
 
         if self.learning_step % self.a_target_update_steps == 0:
             self.Target_Actor.soft_update(self.Actor.model)
@@ -180,8 +186,12 @@ class ActorNet:
 
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         state = Input(shape=(state_dim,))
-        x = Dense(fc1_units, activation='relu')(state)
+        x = Dense(fc1_units)(state)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
         x = Dense(fc2_units, activation='relu')(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
         x = Dense(action_dim, activation='linear')(x)
         out = ReLU(max_value=env.action_space.n)(x)   # clip the output to be within the pipe number range
         # out = tf.clip_by_value(x, 0, env.action_space.n)
@@ -202,6 +212,8 @@ class ActorNet:
             self.model.input: states,                  # pass states to model input layer
             self.action_grads: action_grads
         })
+
+        # return summary
 
     def load_weights(self, model_path):
         self.model.load_weights(model_path)
@@ -237,9 +249,13 @@ class CriticNet:
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         state = Input(shape=(state_dim,))
         action = Input(shape=(action_dim,))
-        x = Dense(fc1_units, activation='relu')(state)
+        x = Dense(fc1_units)(state)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
         x = concatenate([x, action], axis=1)  # concat transformed state and raw action as input for fc2
-        x = Dense(fc2_units, activation='relu')(x)
+        x = Dense(fc2_units)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
         out = Dense(1)(x)
 
         model = Model(inputs=[state, action], outputs=out)
@@ -308,18 +324,18 @@ class ReplayBuffer:
 
 if __name__ == '__main__':
     # make model dirs
-    # os.makedirs('./saved_models/wolp/actor', exist_ok=True)
-    # os.makedirs('./saved_models/wolp/critic', exist_ok=True)
-    #
-    # # saved model path
-    # actor_path = './saved_models/wolp/actor/actor_weights.h5'
-    # critic_path = './saved_models/wolp/critic/critic_weights.h5'
+    os.makedirs('./saved_models/wolp_bn/actor', exist_ok=True)
+    os.makedirs('./saved_models/wolp_bn/critic', exist_ok=True)
+
+    # saved model path
+    actor_path = './saved_models/wolp_bn/actor/actor_weights.h5'
+    critic_path = './saved_models/wolp_bn/critic/critic_weights.h5'
 
     OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.3)
 
     # initialize agent and env
     env = gym.make('SpaceInvaders-ram-v0')
-    agent = wolp_agent(
+    agent = wolp_bn_agent(
                 state_dim=env.observation_space.shape[0],
                 action_dim=1,
                 lr_a=0.000005,
@@ -337,69 +353,72 @@ if __name__ == '__main__':
     except:
         pass
 
-    # # training
-    # rewards = []                        # list containing scores from each episode
-    # rewards_window = deque(maxlen=1000)  # last 100 scores
-    #
-    # for i_episode in range(500):
-    #     ep_start_time = time.time()
-    #     eps_reward = 0
-    #     state = env.reset()
-    #     if i_episode % 50 == 0:
-    #         tf.keras.backend.clear_session()
-    #         # tf.reset_default_graph()
-    #         agent = wolp_agent(
-    #             state_dim=env.observation_space.shape[0],
-    #             action_dim=1,
-    #             lr_a=0.00001,
-    #             lr_c=0.0001,
-    #             buffer_size=1e5,
-    #             batch_size=32,
-    #             a_target_update_steps=1,
-    #             c_target_update_steps=1,
-    #             gamma=0.95,
-    #             tau=0.1,
-    #             save_graph=False)
-    #         try:
-    #             agent.restore(actor_path, critic_path)
-    #             logging.info('restore saved model')
-    #         except:
-    #             pass
-    #
-    #     while True:
-    #         env.render()
-    #         # if len(agent.Buffer.memory) < agent.buffer_size:
-    #         #     action = np.random.choice(env.action_space.n)
-    #         # else:
-    #         #     action = agent.act(state, 2)
-    #
-    #         action = agent.act(state, 2)
-    #         next_state, reward, done, _ = env.step(action)
-    #         if (next_state == state).all():
-    #             action = np.random.choice(env.action_space.n)
-    #             next_state, reward, done, _ = env.step(action)
-    #
-    #         agent.store(state, action, reward, next_state, done)
-    #
-    #         if len(agent.Buffer.memory) == agent.buffer_size:
-    #             agent.learn()
-    #         state = next_state
-    #         eps_reward += reward
-    #         if done:
-    #             break
-    #
-    #     rewards_window.append(eps_reward)  # save most recent score
-    #     rewards.append(eps_reward)  # save most recent score
-    #     print('\rEpisode {}\tAverage Score: {:.2f} | completed in {:.2f} s'.format(i_episode, np.mean(rewards_window), time.time() - ep_start_time))
-    #     if np.mean(rewards_window) > 300:
-    #         print('Env solved!')
-    #         agent.save(actor_path, critic_path)
-    #         break
-    #
-    #     # agent.save(actor_path, critic_path)
-    #     # logging.info('save model weights')
-    # env.close()
+    # training
+    rewards = []                        # list containing scores from each episode
+    rewards_window = deque(maxlen=1000)  # last 100 scores
+
+    for i_episode in range(2000):
+        ep_start_time = time.time()
+        eps_reward = 0
+        state = env.reset()
+
+        # if i_episode % 50 == 0:
+        #     tf.keras.backend.clear_session()
+        #     # tf.reset_default_graph()
+        #     agent = wolp_bn_agent(
+        #         state_dim=env.observation_space.shape[0],
+        #         action_dim=1,
+        #         lr_a=0.00001,
+        #         lr_c=0.0001,
+        #         buffer_size=1e5,
+        #         batch_size=32,
+        #         a_target_update_steps=1,
+        #         c_target_update_steps=1,
+        #         gamma=0.95,
+        #         tau=0.1,
+        #         save_graph=True)
+        #     try:
+        #         agent.restore(actor_path, critic_path)
+        #         logging.info('restore saved model')
+        #     except:
+        #         pass
+
+        while True:
+            env.render()
+            # if len(agent.Buffer.memory) < agent.buffer_size:
+            #     action = np.random.choice(env.action_space.n)
+            # else:
+            #     action = agent.act(state, 2)
+
+            action = agent.act(state, 2)
+            next_state, reward, done, _ = env.step(action)
+            if (next_state == state).all():
+                action = np.random.choice(env.action_space.n)
+                next_state, reward, done, _ = env.step(action)
+
+            agent.store(state, action, reward, next_state, done)
+
+            if len(agent.Buffer.memory) == agent.buffer_size:
+                agent.learn()
+            state = next_state
+            eps_reward += reward
+            if done:
+                break
+
+        rewards_window.append(eps_reward)  # save most recent score
+        rewards.append(eps_reward)  # save most recent score
+        print('\rEpisode {}\tAverage Score: {:.2f} | completed in {:.2f} s'.format(i_episode, np.mean(rewards_window), time.time() - ep_start_time))
+        if np.mean(rewards_window) > 300:
+            print('Env solved!')
+            agent.save(actor_path, critic_path)
+            break
+
+        agent.save(actor_path, critic_path)
+        logging.info('save model weights')
+
+    # wolp_bn_agent.writer.close()
+    env.close()
 
     # save weights
-    # agent.save(actor_path, critic_path)
-    # logging.info('save model weights')
+    agent.save(actor_path, critic_path)
+    logging.info('save model weights')
