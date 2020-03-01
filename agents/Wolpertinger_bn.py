@@ -23,9 +23,6 @@ from OU_noise import OUNoise
 # hyper
 LEGAL_ACTION_CONSTRAINT = False
 
-LOG_DIR = './logs/'
-CRITIC_CALLBACK = tf.keras.callbacks.TensorBoard(log_dir=LOG_DIR, histogram_freq=1)
-
 class wolp_bn_agent:
     def __init__(self,
                  state_dim,
@@ -67,15 +64,15 @@ class wolp_bn_agent:
         self.sess.run(tf.global_variables_initializer())
 
         # save graoh
-        # if save_graph:
-            # self.writer = tf.summary.FileWriter(LOG_DIR, self.sess.graph)
+        if save_graph:
+            tf.summary.FileWriter(LOG_DIR, self.sess.graph)
 
         # record the learning steps
         self.learning_step = 0
 
     def act(self, state, k_candidates):
         proto_action = self.Actor.forward(state)
-        noised_proto_action = proto_action + OU.noise()
+        # noised_proto_action = proto_action + OU.noise()
 
         action = self.refine_action(state, proto_action, k_candidates, target=False)
         try:
@@ -144,12 +141,10 @@ class wolp_bn_agent:
 
         proto_actions = self.Actor.forward(states)
         action_grads = self.Critic.get_action_grads(states, proto_actions)  # actor are updated wrt to proto action
-        # summary = self.Actor.train(states, action_grads)
         self.Actor.train(states, action_grads)
 
         # learning counter
         self.learning_step += 1
-        # self.writer.add_summary(summary, self.learning_step)
 
         if self.learning_step % self.a_target_update_steps == 0:
             self.Target_Actor.soft_update(self.Actor.model)
@@ -170,6 +165,7 @@ class ActorNet:
     def __init__(self, sess, state_dim, action_dim, fc1_units, fc2_units, lr, tau):
         self.sess = sess
         self.tau = tau
+
         # create network
         self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
         self.optimizer = tf.train.AdamOptimizer(lr)
@@ -212,8 +208,6 @@ class ActorNet:
             self.model.input: states,                  # pass states to model input layer
             self.action_grads: action_grads
         })
-
-        # return summary
 
     def load_weights(self, model_path):
         self.model.load_weights(model_path)
@@ -331,7 +325,7 @@ if __name__ == '__main__':
     actor_path = './saved_models/wolp_bn/actor/actor_weights.h5'
     critic_path = './saved_models/wolp_bn/critic/critic_weights.h5'
 
-    OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.3)
+    # OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.3)
 
     # initialize agent and env
     env = gym.make('SpaceInvaders-ram-v0')
@@ -408,7 +402,7 @@ if __name__ == '__main__':
         rewards_window.append(eps_reward)  # save most recent score
         rewards.append(eps_reward)  # save most recent score
         print('\rEpisode {}\tAverage Score: {:.2f} | completed in {:.2f} s'.format(i_episode, np.mean(rewards_window), time.time() - ep_start_time))
-        if np.mean(rewards_window) > 300:
+        if np.mean(rewards_window) > 350:
             print('Env solved!')
             agent.save(actor_path, critic_path)
             break

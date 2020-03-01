@@ -5,12 +5,17 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from tensorflow.keras import Sequential, Model
-from tensorflow.keras.layers import Dense, Input, ReLU, Activation, concatenate
+from tensorflow.keras.layers import Dense, Input, ReLU, LeakyReLU, Activation, concatenate, Lambda, BatchNormalization
+from tensorflow.keras import regularizers
+from tensorflow.keras import initializers
 
 from collections import deque, namedtuple
 import random
 import warnings
 import time
+
+# OU Noise
+from OU_noise import OUNoise
 
 ############################## ACTOR ###############################
 
@@ -23,9 +28,6 @@ class ActorNet:
         self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
 
         self.optimizer = tf.train.AdamOptimizer(lr)  # optimizer, note the version
-        self.loss = tf.keras.losses.MeanSquaredError()
-        self.model.compile(optimizer=self.optimizer,
-                           loss=self.loss)
 
         self.actor_params = self.model.trainable_weights
         self.action_grads = tf.placeholder(tf.float32, [None, action_dim])  # receive action gradients from the critic
@@ -33,14 +35,24 @@ class ActorNet:
         self.grads = tf.gradients(self.model.output, self.actor_params, -self.action_grads)
         self.train_op = self.optimizer.apply_gradients(zip(self.grads, self.actor_params))
 
-
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         state = Input(shape=(state_dim,))
-        x = Dense(fc1_units, activation='relu')(state)
-        x = Dense(fc2_units, activation='relu')(x)
-        out = Dense(action_dim, activation='softmax')(x)
-        # out = ReLU(max_value=10)(x)  # set upper bounds for relu
+        # x = Dense(fc1_units, activation='relu')(state)
+        # x = Dense(fc2_units, activation='relu')(x)
+        x = Dense(fc1_units, kernel_initializer='he_normal')(state)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Dense(fc2_units, kernel_initializer='he_normal')(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Dense(action_dim,
+                  kernel_initializer=initializers.RandomUniform(-3e-4, 3e-4),
+                  bias_initializer=initializers.RandomUniform(minval=-3e-4, maxval=3e-4),
+                  activation='tanh')(x)
+        # x = Dense(action_dim, activation='tanh')(x)
+        out = Lambda(lambda x: x * 2)(x)
 
+        # out = Dense(action_dim, kernel_initializer='he_normal', activation='relu')(x)
         model = Model(inputs=state, outputs=out)
 
         return model
@@ -99,10 +111,26 @@ class CriticNet:
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         state = Input(shape=(state_dim,))
         action = Input(shape=(action_dim,))
-        x = Dense(fc1_units, activation='relu')(state)
-        x = concatenate([x, action], axis=1)  # concat transformed state and raw action as input for fc2
-        x = Dense(fc2_units, activation='relu')(x)
-        out = Dense(1)(x)
+        x = Dense(fc1_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(state)
+        x = BatchNormalization()(x)  # batch norm after processing state
+        x = ReLU()(x)
+        a = Dense(fc1_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(action)
+        a = BatchNormalization()(a)  # batch norm after processing state
+        a = ReLU()(a)
+        x = concatenate([x, a], axis=1)   # concat transformed state and raw action as input for fc2
+        x = Dense(fc2_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(x)
+        x = BatchNormalization()(x) # batch norm after processing state
+        x = ReLU()(x)
+        out = Dense(1,
+                    kernel_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
+                    bias_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
+                    kernel_regularizer=regularizers.l2(0.01))(x)
 
         model = Model(inputs=[state, action], outputs=out)
 
@@ -119,8 +147,9 @@ class CriticNet:
     def get_action_grads(self, states, actions):
         if len(states.shape) < 2:
             states = np.expand_dims(states, axis=0)
+        # for scalar actions
         if len(actions.shape) < 2:
-            states = np.expand_dims(actions, axis=0)
+            actions = np.expand_dims(actions, axis=1)
 
         action_grads = self.sess.run(self.action_grads, feed_dict={
             self.model.inputs[0]: states,
@@ -182,9 +211,6 @@ class DDPG:
                  batch_size,
                  a_target_update_steps,
                  c_target_update_steps,
-                 epsilon,
-                 epsilon_decay,
-                 epsilon_min,
                  gamma,
                  tau,
                  save_graph):
@@ -192,9 +218,6 @@ class DDPG:
         self.action_dim = action_dim
         self.lr_a = lr_a
         self.lr_c = lr_c
-        self.epsilon = epsilon
-        self.epsilon_decay = epsilon_decay
-        self.epsilon_min = epsilon_min
         self.gamma = gamma
         self.buffer_size = int(buffer_size)
         self.batch_size = int(batch_size)
@@ -212,13 +235,14 @@ class DDPG:
         self.Buffer = ReplayBuffer(self.buffer_size)
 
         # create actor and critic networks
-        self.Actor = ActorNet(self.sess, self.state_dim, self.action_dim, 128, 128, lr=self.lr_a, tau=self.tau)
-        self.Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 128, 128, lr=self.lr_c, tau=self.tau)
-        self.Target_Actor = ActorNet(self.sess, self.state_dim, self.action_dim, 128, 128, lr=self.lr_a, tau=self.tau)
-        self.Target_Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 128, 128, lr=self.lr_c, tau=self.tau)
+        self.Actor = ActorNet(self.sess, self.state_dim, self.action_dim, 256, 128, lr=self.lr_a, tau=self.tau)
+        self.Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 256, 128, lr=self.lr_c, tau=self.tau)
+        self.Target_Actor = ActorNet(self.sess, self.state_dim, self.action_dim, 256, 128, lr=self.lr_a, tau=self.tau)
+        self.Target_Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 256, 128, lr=self.lr_c, tau=self.tau)
 
         # initialize variables
         self.sess.run(tf.global_variables_initializer())
+
         if save_graph:
             tf.summary.FileWriter('./logs/', self.sess.graph)
 
@@ -226,15 +250,10 @@ class DDPG:
         self.learning_step = 0
 
     def act(self, state):
-        if self.epsilon > self.epsilon_min:
-            self.epsilon *= self.epsilon_decay
-        # epsilon greedy
-        if np.random.uniform() >= self.epsilon:
-            action = self.Actor.forward(state)
-        else:
-            action = env.action_space.sample()  # a random action
+        raw_action = self.Actor.forward(state)
+        noised_action = raw_action + OU.noise()
 
-        return action.flatten()
+        return noised_action.flatten()
 
     def store(self, state, action, reward, next_state, done):
         self.Buffer.store(state, action, reward, next_state, done)
@@ -268,38 +287,40 @@ class DDPG:
 if __name__ == '__main__':
     os.makedirs('./saved_models/ddpg/actor', exist_ok=True)
     os.makedirs('./saved_models/ddpg/critic', exist_ok=True)
-    env = gym.make('Breakout-ram-v0')
+
+    OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.2)
+
+    env = gym.make('MountainCarContinuous-v0')
+    # env = gym.make('BipedalWalker-v2')
     agent = DDPG(state_dim=env.observation_space.shape[0],
-                 action_dim=1,
-                 lr_a=0.001,
-                 lr_c=0.01,
-                 buffer_size=1e3,
-                 batch_size=32,
+                 action_dim=env.action_space.shape[0],
+                 lr_a=0.00001,
+                 lr_c=0.001,
+                 buffer_size=1e5,
+                 batch_size=128,
                  a_target_update_steps=1,
                  c_target_update_steps=1,
-                 epsilon=0.5,
-                 epsilon_decay=0.95,
-                 epsilon_min=0.05,
-                 gamma=0.9,
-                 tau=0.95,
-                 save_graph=True)
-    # try:
-    #     agent.Actor.load_weights('./saved_models/ddpg/actor/actor_weights.h5')
-    #     agent.Critic.load_weights('./saved_models/ddpg/critic/critic_weights.h5')
-    # except:
-    #     pass
+                 gamma=0.99,
+                 tau=0.001,
+                 save_graph=False)
+    try:
+        agent.Actor.load_weights('./saved_models/ddpg/actor/actor_weights.h5')
+        agent.Critic.load_weights('./saved_models/ddpg/critic/critic_weights.h5')
+    except:
+        pass
 
     #  run training
     rewards = []                        # list containing scores from each episode
     rewards_window = deque(maxlen=100)  # last 100 scores
 
-    for i_episode in range(100):
+    for i_episode in range(2000):
         ep_start_time = time.time()
         eps_reward = 0
         state = env.reset()
         while True:
-            env.render()
+            # env.render()
             action = agent.act(state)
+            # print(action)
             next_state, reward, done, _ = env.step(action)
             agent.store(state, action, reward, next_state, done)
             if len(agent.Buffer.Buffer) == agent.buffer_size:
@@ -317,14 +338,14 @@ if __name__ == '__main__':
 
     env.close()
 
-    # plot the rewards
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111)
-    plt.plot(np.arange(len(rewards)), rewards)
-    plt.ylabel('Rewards', fontsize=12)
-    plt.xlabel('Episode #', fontsize=12)
-    plt.show()
+    # # plot the rewards
+    # fig = plt.figure(figsize=(10, 8))
+    # ax = fig.add_subplot(111)
+    # plt.plot(np.arange(len(rewards)), rewards)
+    # plt.ylabel('Rewards', fontsize=12)
+    # plt.xlabel('Episode #', fontsize=12)
+    # plt.show()
 
-    # # save model
-    # agent.Actor.save_weights('./saved_models/ddpg/actor/actor_weights.h5', overwrite=True)
-    # agent.Critic.save_weights('./saved_models/ddpg/critic/critic_weights.h5', overwrite=True)
+    # save model
+    agent.Actor.save_weights('./saved_models/ddpg/actor/actor_weights.h5', overwrite=True)
+    agent.Critic.save_weights('./saved_models/ddpg/critic/critic_weights.h5', overwrite=True)

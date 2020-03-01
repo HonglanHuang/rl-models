@@ -2,15 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1ca5fae-f3ff-40b2-a274-cc2b04272c1f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agents/DDPG.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agents/OU_noise.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DQN.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DQN.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/baselines/ddpg_baseline.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/A2C.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/A2C.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/DQN.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/DQN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/DDPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/DDPG.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agents/Wolpertinger.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/Wolpertinger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/Wolpertinger_bn.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/Wolpertinger_bn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/a2c/actor/actor_weights.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/a2c/critic/critic_weights.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/ddpg/actor/actor_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/ddpg/actor/actor_weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/ddpg/critic/critic_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/ddpg/critic/critic_weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp/actor/actor_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/wolp/actor/actor_weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp/critic/critic_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/wolp/critic/critic_weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp_bn/actor/actor_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/wolp_bn/actor/actor_weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp_bn/critic/critic_weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/agents/saved_models/wolp_bn/critic/critic_weights.h5" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,25 +24,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agents/Wolpertinger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="656">
-              <caret line="385" column="32" selection-start-line="385" selection-start-column="32" selection-end-line="385" selection-end-column="32" />
+            <state relative-caret-position="220">
+              <caret line="420" column="38" lean-forward="true" selection-start-line="420" selection-start-column="38" selection-end-line="420" selection-end-column="38" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#498#5941#0" />
+                <element signature="e#6033#8265#0" />
+                <element signature="e#8359#11163#0" />
+                <element signature="e#11265#12012#0" />
+                <element signature="e#12045#15453#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agents/Wolpertinger_bn.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agents/DDPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1722">
-              <caret line="419" column="15" lean-forward="true" selection-start-line="419" selection-start-column="15" selection-end-line="419" selection-end-column="15" />
+            <state relative-caret-position="-471">
+              <caret line="255" column="21" selection-start-line="255" selection-start-column="21" selection-end-line="255" selection-end-column="21" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#564#3441#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/baselines/ddpg_baseline.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -62,10 +84,11 @@
         <option value="$PROJECT_DIR$/agents/A2C.py" />
         <option value="$PROJECT_DIR$/agents/DQN.py" />
         <option value="$USER_HOME$/Anaconda3/Lib/site-packages/gym/envs/user/WaterNetEnv_v1.py" />
-        <option value="$PROJECT_DIR$/agents/DDPG.py" />
         <option value="$PROJECT_DIR$/agents/OU_noise.py" />
-        <option value="$PROJECT_DIR$/agents/Wolpertinger.py" />
         <option value="$PROJECT_DIR$/agents/Wolpertinger_bn.py" />
+        <option value="$PROJECT_DIR$/agents/Wolpertinger.py" />
+        <option value="$PROJECT_DIR$/agents/DDPG.py" />
+        <option value="$PROJECT_DIR$/baselines/ddpg_baseline.py" />
       </list>
     </option>
   </component>
@@ -75,19 +98,38 @@
     <option name="height" value="1101" />
   </component>
   <component name="ProjectId" id="1OUXdLqYNMiVUbX5Zb6ovlgm9Tz" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="rl-models" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rl-models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rl-models" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rl-models" type="462c0819:PsiDirectoryNode" />
+              <item name="agents" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Research/Water Distribution/RL_Model_v2" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -119,7 +161,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Wolpertinger_bn">
+  <component name="RunManager" selected="Python.ddpg_baseline">
     <configuration name="A2C" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,9 +188,6 @@
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -212,6 +251,9 @@
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -249,18 +291,39 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ddpg_baseline" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DQN" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/baselines" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/baselines/ddpg_baseline.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.DQN" />
       <item itemvalue="Python.DDPG" />
       <item itemvalue="Python.Wolpertinger" />
       <item itemvalue="Python.A2C" />
       <item itemvalue="Python.Wolpertinger_bn" />
+      <item itemvalue="Python.ddpg_baseline" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ddpg_baseline" />
+        <item itemvalue="Python.DDPG" />
         <item itemvalue="Python.Wolpertinger_bn" />
         <item itemvalue="Python.Wolpertinger" />
-        <item itemvalue="Python.DDPG" />
         <item itemvalue="Python.A2C" />
       </list>
     </recent_temporary>
@@ -335,6 +398,9 @@
       <workItem from="1582507144930" duration="3161000" />
       <workItem from="1582515677847" duration="618000" />
       <workItem from="1582572569411" duration="9489000" />
+      <workItem from="1582610639250" duration="3277000" />
+      <workItem from="1582650350969" duration="43434000" />
+      <workItem from="1582909817106" duration="10953000" />
     </task>
     <task id="LOCAL-00001" summary="hh">
       <created>1563046370966</created>
@@ -347,12 +413,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169228000" />
+    <option name="totallyTimeSpent" value="226892000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1292" height="692" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22815534" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24029127" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -367,7 +434,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50161815" side_tool="true" weight="0.4007092" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49838188" visible="true" weight="0.50886524" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49838188" visible="true" weight="0.34397164" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -510,17 +577,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/gym/envs/registration.py">
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pyglet/gl/lib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
+        <state relative-caret-position="123">
+          <caret line="104" selection-start-line="104" selection-end-line="104" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents/DDPG.py">
+    <entry file="file://$PROJECT_DIR$/agents/Wolpertinger_bn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4760">
-          <caret line="292" selection-start-line="292" selection-end-line="317" selection-end-column="15" />
+        <state relative-caret-position="153">
+          <caret line="74" column="10" selection-start-line="74" selection-start-column="10" selection-end-line="74" selection-end-column="57" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -529,47 +596,73 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/agents/DQN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="155" selection-start-line="155" selection-end-line="155" />
+        <state relative-caret-position="-1007">
+          <caret line="78" column="28" selection-start-line="78" selection-start-column="22" selection-end-line="78" selection-end-column="28" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_import_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/gym/envs/registration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/baselines/ddpg_baseline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agents/OU_noise.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="16" column="26" lean-forward="true" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+        <state relative-caret-position="-52">
+          <caret line="21" column="62" lean-forward="true" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
           <folding>
             <element signature="e#248#266#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pyglet/gl/lib.py">
+    <entry file="file://$PROJECT_DIR$/agents/DDPG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="104" selection-start-line="104" selection-end-line="104" />
+        <state relative-caret-position="-471">
+          <caret line="255" column="21" selection-start-line="255" selection-start-column="21" selection-end-line="255" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#564#3441#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agents/Wolpertinger.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="656">
-          <caret line="385" column="32" selection-start-line="385" selection-start-column="32" selection-end-line="385" selection-end-column="32" />
+        <state relative-caret-position="220">
+          <caret line="420" column="38" lean-forward="true" selection-start-line="420" selection-start-column="38" selection-end-line="420" selection-end-column="38" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agents/Wolpertinger_bn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1722">
-          <caret line="419" column="15" lean-forward="true" selection-start-line="419" selection-start-column="15" selection-end-line="419" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#498#5941#0" />
+            <element signature="e#6033#8265#0" />
+            <element signature="e#8359#11163#0" />
+            <element signature="e#11265#12012#0" />
+            <element signature="e#12045#15453#0" />
           </folding>
         </state>
       </provider>
