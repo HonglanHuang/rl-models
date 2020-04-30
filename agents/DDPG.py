@@ -17,188 +17,6 @@ import time
 # OU Noise
 from OU_noise import OUNoise
 
-############################## ACTOR ###############################
-
-class ActorNet:
-    def __init__(self, sess, state_dim, action_dim, fc1_units, fc2_units, lr, tau):
-        self.sess = sess
-        self.tau = tau
-
-        # create network
-        self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
-
-        self.optimizer = tf.train.AdamOptimizer(lr)  # optimizer, note the version
-
-        self.actor_params = self.model.trainable_weights
-        self.action_grads = tf.placeholder(tf.float32, [None, action_dim])  # receive action gradients from the critic
-
-        self.grads = tf.gradients(self.model.output, self.actor_params, -self.action_grads)
-        self.train_op = self.optimizer.apply_gradients(zip(self.grads, self.actor_params))
-
-    def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
-        state = Input(shape=(state_dim,))
-        # x = Dense(fc1_units, activation='relu')(state)
-        # x = Dense(fc2_units, activation='relu')(x)
-        x = Dense(fc1_units, kernel_initializer='he_normal')(state)
-        x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
-        x = Dense(fc2_units, kernel_initializer='he_normal')(x)
-        x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
-        x = Dense(action_dim,
-                  kernel_initializer=initializers.RandomUniform(-3e-4, 3e-4),
-                  bias_initializer=initializers.RandomUniform(minval=-3e-4, maxval=3e-4),
-                  activation='tanh')(x)
-        # x = Dense(action_dim, activation='tanh')(x)
-        out = Lambda(lambda x: x * 2)(x)
-
-        # out = Dense(action_dim, kernel_initializer='he_normal', activation='relu')(x)
-        model = Model(inputs=state, outputs=out)
-
-        return model
-
-    def forward(self, state):
-        if len(state.shape) < 2:
-            state = np.expand_dims(state, axis=0)
-        action = self.model.predict(state)
-
-        return action
-
-    def train(self, states, action_grads):
-        """
-        apply dQ/d_theta = dQ/da * da/d_theta
-        put dQ/da at grad_ys
-        make -dQ/da in order to ascend the policy towards Q
-        """
-        self.sess.run(self.train_op, feed_dict={
-            self.model.input: states,                 # pass states to model input layer
-            self.action_grads: action_grads
-        })
-
-        # # non sess method
-        # self.model.train_on_batch(x=state, y=action, sample_weight=-action_grads)  # resulting loss = dQ/da * da/a_theta
-
-    def load_weights(self, model_path):
-        self.model.load_weights(model_path)
-
-    def save_weights(self, model_path, overwrite=True):
-        self.model.save_weights(model_path, overwrite=overwrite)
-
-    def soft_update(self, actor_net):
-        actor_w = actor_net.get_weights()
-        model_w = self.model.get_weights()
-        for idx in range(len(model_w)):
-            model_w[idx] = self.tau * actor_w[idx] + (1 - self.tau) * model_w[idx]
-        self.model.set_weights(model_w)
-
-############################## CRITIC ###############################
-
-class CriticNet:
-    # critic network model
-    def __init__(self, sess, state_dim, action_dim, fc1_units, fc2_units, lr, tau):
-        self.sess = sess
-        self.tau = tau
-        # create network
-        self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
-        self.optimizer = tf.train.AdamOptimizer(lr)
-        self.loss = tf.keras.losses.MeanSquaredError()
-        self.model.compile(optimizer=self.optimizer,
-                           loss=self.loss)
-
-        self.critic_params = self.model.trainable_variables
-        self.action_grads = tf.gradients(self.model.output, self.model.inputs[1])  # dQ/da
-
-    def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
-        state = Input(shape=(state_dim,))
-        action = Input(shape=(action_dim,))
-        x = Dense(fc1_units,
-                  kernel_initializer='he_normal',
-                  kernel_regularizer=regularizers.l2(0.01))(state)
-        x = BatchNormalization()(x)  # batch norm after processing state
-        x = ReLU()(x)
-        a = Dense(fc1_units,
-                  kernel_initializer='he_normal',
-                  kernel_regularizer=regularizers.l2(0.01))(action)
-        a = BatchNormalization()(a)  # batch norm after processing state
-        a = ReLU()(a)
-        x = concatenate([x, a], axis=1)   # concat transformed state and raw action as input for fc2
-        x = Dense(fc2_units,
-                  kernel_initializer='he_normal',
-                  kernel_regularizer=regularizers.l2(0.01))(x)
-        x = BatchNormalization()(x) # batch norm after processing state
-        x = ReLU()(x)
-        out = Dense(1,
-                    kernel_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
-                    bias_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
-                    kernel_regularizer=regularizers.l2(0.01))(x)
-
-        model = Model(inputs=[state, action], outputs=out)
-
-        return model
-
-    def forward(self, state, action):
-        q = self.model.predict([state, action])
-
-        return q
-
-    def train(self, states, actions, y):
-        self.model.train_on_batch(x=[states, actions], y=y)
-
-    def get_action_grads(self, states, actions):
-        if len(states.shape) < 2:
-            states = np.expand_dims(states, axis=0)
-        # for scalar actions
-        if len(actions.shape) < 2:
-            actions = np.expand_dims(actions, axis=1)
-
-        action_grads = self.sess.run(self.action_grads, feed_dict={
-            self.model.inputs[0]: states,
-            self.model.inputs[1]: actions
-        })[0]
-
-        return action_grads
-
-    def load_weights(self, model_path):
-        self.model.load_weights(model_path)
-
-    def save_weights(self, model_path, overwrite=True):
-        self.model.save_weights(model_path, overwrite=overwrite)
-
-    def soft_update(self, critic_net):
-        critic_w = critic_net.get_weights()
-        model_w = self.model.get_weights()
-        for idx in range(len(model_w)):
-            model_w[idx] = self.tau * critic_w[idx] + (1 - self.tau) * model_w[idx]
-        self.model.set_weights(model_w)
-
-############################## REPLAY BUFFER #############################
-
-class ReplayBuffer:
-    # replay buffer
-    def __init__(self, buffer_size):
-        self.Buffer = deque(maxlen=buffer_size)
-        self.transition_tuple = namedtuple('Transitions', ['s', 'a', 'r', 's_n', 'done'])
-
-    def store(self, state, action, reward, next_state, done):
-        transition = self.transition_tuple(state, action, reward, next_state, done)
-        self.Buffer.append(transition)
-
-    def sample(self, batch_size):
-        batch = random.sample(self.Buffer, batch_size)
-        transitions = zip(*batch)  # unfold the transition tuples and make s, a, r, s_n, done tuples grouped by type
-
-        """
-        map the transitions to arrays
-        resulting dim: states batch x state_dim
-                       actions batch x action_dim 
-                       rewards (batch, )
-                       next_states batch x state_dim
-                       dones (batch, ) 
-        """
-        states, actions, rewards, next_states, dones = map(np.array, transitions)
-
-        return states, actions, rewards, next_states, dones
-
 ############################## DDPG Agent #############################
 
 class DDPG:
@@ -283,6 +101,188 @@ class DDPG:
         if self.learning_step % self.c_target_update_steps == 0:
             self.Target_Critic.soft_update(self.Critic.model)
 
+############################## ACTOR ###############################
+
+class ActorNet:
+    def __init__(self, sess, state_dim, action_dim, fc1_units, fc2_units, lr, tau):
+        self.sess = sess
+        self.tau = tau
+
+        # create network
+        self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
+
+        self.optimizer = tf.train.AdamOptimizer(lr)  # optimizer, note the version
+
+        self.actor_params = self.model.trainable_weights
+        self.action_grads = tf.placeholder(tf.float32, [None, action_dim])  # receive action gradients from the critic
+
+        self.grads = tf.gradients(self.model.output, self.actor_params, -self.action_grads)
+        self.train_op = self.optimizer.apply_gradients(zip(self.grads, self.actor_params))
+
+    def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
+        state = Input(shape=(state_dim,))
+        # x = Dense(fc1_units, activation='relu')(state)
+        # x = Dense(fc2_units, activation='relu')(x)
+        x = Dense(fc1_units, kernel_initializer='he_normal')(state)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Dense(fc2_units, kernel_initializer='he_normal')(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Dense(action_dim,
+                  kernel_initializer=initializers.RandomUniform(-3e-4, 3e-4),
+                  bias_initializer=initializers.RandomUniform(minval=-3e-4, maxval=3e-4),
+                  activation='tanh')(x)
+        # x = Dense(action_dim, activation='tanh')(x)
+        out = Lambda(lambda x: x * 2)(x)
+
+        # out = Dense(action_dim, kernel_initializer='he_normal', activation='relu')(x)
+        model = Model(inputs=state, outputs=out)
+
+        return model
+
+    def forward(self, state):
+        if len(state.shape) < 2:
+            state = np.expand_dims(state, axis=0)
+        action = self.model.predict(state)
+
+        return action
+
+    def train(self, states, action_grads):
+        """
+        apply dQ/d_theta = dQ/da * da/d_theta
+        put dQ/da at grad_ys
+        make -dQ/da in order to ascend the policy towards Q
+        """
+        self.sess.run(self.train_op, feed_dict={
+            self.model.input: states,                 # pass states to model input layer
+            self.action_grads: action_grads
+        })
+
+        # # non sess method
+        # self.model.train_on_batch(x=state, y=action, sample_weight=-action_grads)  # resulting loss = dQ/da * da/a_theta
+
+    def load_weights(self, model_path):
+        self.model.load_weights(model_path)
+
+    def save_weights(self, model_path, overwrite=True):
+        self.model.save_weights(model_path, overwrite=overwrite)
+
+    def soft_update(self, actor_net):
+        actor_w = actor_net.get_weights()
+        model_w = self.model.get_weights()
+        for idx in range(len(model_w)):
+            model_w[idx] = self.tau * actor_w[idx] + (1 - self.tau) * model_w[idx]
+        self.model.set_weights(model_w)
+
+############################## CRITIC ###############################
+
+class CriticNet:
+    # critic network model
+    def __init__(self, sess, state_dim, action_dim, fc1_units, fc2_units, lr, tau):
+        self.sess = sess
+        self.tau = tau
+        # create network
+        self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
+        self.optimizer = tf.train.AdamOptimizer(lr)
+        # self.loss = tf.keras.losses.mean_squared_error()
+        self.model.compile(optimizer=self.optimizer,
+                           loss='mse')
+
+        self.critic_params = self.model.trainable_variables
+        self.action_grads = tf.gradients(self.model.output, self.model.inputs[1])  # dQ/da
+
+    def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
+        state = Input(shape=(state_dim,))
+        action = Input(shape=(action_dim,))
+        x = Dense(fc1_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(state)
+        x = BatchNormalization()(x)  # batch norm after processing state
+        x = ReLU()(x)
+        a = Dense(fc1_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(action)
+        a = BatchNormalization()(a)  # batch norm after processing state
+        a = ReLU()(a)
+        x = concatenate([x, a], axis=1)   # concat transformed state and raw action as input for fc2
+        x = Dense(fc2_units,
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=regularizers.l2(0.01))(x)
+        x = BatchNormalization()(x) # batch norm after processing state
+        x = ReLU()(x)
+        out = Dense(1,
+                    kernel_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
+                    bias_initializer=initializers.RandomUniform(minval=-3e-3, maxval=3e-3),
+                    kernel_regularizer=regularizers.l2(0.01))(x)
+
+        model = Model(inputs=[state, action], outputs=out)
+
+        return model
+
+    def forward(self, state, action):
+        q = self.model.predict([state, action])
+
+        return q
+
+    def train(self, states, actions, y):
+        self.model.train_on_batch(x=[states, actions], y=y)
+
+    def get_action_grads(self, states, actions):
+        if len(states.shape) < 2:
+            states = np.expand_dims(states, axis=0)
+        # for scalar actions
+        if len(actions.shape) < 2:
+            actions = np.expand_dims(actions, axis=1)
+
+        action_grads = self.sess.run(self.action_grads, feed_dict={
+            self.model.inputs[0]: states,
+            self.model.inputs[1]: actions
+        })[0]
+
+        return action_grads
+
+    def load_weights(self, model_path):
+        self.model.load_weights(model_path)
+
+    def save_weights(self, model_path, overwrite=True):
+        self.model.save_weights(model_path, overwrite=overwrite)
+
+    def soft_update(self, critic_net):
+        critic_w = critic_net.get_weights()
+        model_w = self.model.get_weights()
+        for idx in range(len(model_w)):
+            model_w[idx] = self.tau * critic_w[idx] + (1 - self.tau) * model_w[idx]
+        self.model.set_weights(model_w)
+
+############################## REPLAY BUFFER #############################
+
+class ReplayBuffer:
+    # replay buffer
+    def __init__(self, buffer_size):
+        self.memory = deque(maxlen=buffer_size)
+        self.transition = namedtuple('Transitions', ['s', 'a', 'r', 's_n', 'done'])
+
+    def store(self, state, action, reward, next_state, done):
+        transition = self.transition(state, action, reward, next_state, done)
+        self.memory.append(transition)
+
+    def sample(self, batch_size):
+        batch = random.sample(self.memory, batch_size)
+        transitions = zip(*batch)  # unfold the transition tuples and make s, a, r, s_n, done tuples grouped by type
+
+        """
+        map the transitions to arrays
+        resulting dim: states batch x state_dim
+                       actions batch x action_dim 
+                       rewards (batch, )
+                       next_states batch x state_dim
+                       dones (batch, ) 
+        """
+        states, actions, rewards, next_states, dones = map(np.array, transitions)
+
+        return states, actions, rewards, next_states, dones
+
 
 if __name__ == '__main__':
     os.makedirs('./saved_models/ddpg/actor', exist_ok=True)
@@ -291,17 +291,16 @@ if __name__ == '__main__':
     OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.2)
 
     env = gym.make('MountainCarContinuous-v0')
-    # env = gym.make('BipedalWalker-v2')
     agent = DDPG(state_dim=env.observation_space.shape[0],
                  action_dim=env.action_space.shape[0],
-                 lr_a=0.00001,
-                 lr_c=0.001,
-                 buffer_size=1e5,
-                 batch_size=128,
+                 lr_a=0.000001,
+                 lr_c=0.00005,
+                 buffer_size=1e4,
+                 batch_size=64,
                  a_target_update_steps=1,
                  c_target_update_steps=1,
                  gamma=0.99,
-                 tau=0.001,
+                 tau=0.01,
                  save_graph=False)
     try:
         agent.Actor.load_weights('./saved_models/ddpg/actor/actor_weights.h5')
@@ -313,17 +312,18 @@ if __name__ == '__main__':
     rewards = []                        # list containing scores from each episode
     rewards_window = deque(maxlen=100)  # last 100 scores
 
-    for i_episode in range(2000):
+    for i_episode in range(500):
         ep_start_time = time.time()
         eps_reward = 0
         state = env.reset()
         while True:
-            # env.render()
+            env.render()
             action = agent.act(state)
             # print(action)
             next_state, reward, done, _ = env.step(action)
             agent.store(state, action, reward, next_state, done)
-            if len(agent.Buffer.Buffer) == agent.buffer_size:
+            if len(agent.Buffer.memory) == agent.buffer_size:
+                # print('agent is learning')
                 agent.learn()
 
             state = next_state
@@ -332,20 +332,28 @@ if __name__ == '__main__':
             if done:
                 break
 
+        # agent.Actor.save_weights('./saved_models/ddpg/actor/actor_weights.h5', overwrite=True)
+        # agent.Critic.save_weights('./saved_models/ddpg/critic/critic_weights.h5', overwrite=True)
+
         rewards_window.append(eps_reward)  # save most recent score
         rewards.append(eps_reward)  # save most recent score
         print('\rEpisode {}\tAverage Score: {:.2f} | completed in {:.2f} s'.format(i_episode, np.mean(rewards_window), time.time() - ep_start_time))
 
+        if np.mean(rewards_window) > 50:
+            print('Env solved!')
+            agent.save(actor_path, critic_path)
+            break
+
     env.close()
 
-    # # plot the rewards
-    # fig = plt.figure(figsize=(10, 8))
-    # ax = fig.add_subplot(111)
-    # plt.plot(np.arange(len(rewards)), rewards)
-    # plt.ylabel('Rewards', fontsize=12)
-    # plt.xlabel('Episode #', fontsize=12)
-    # plt.show()
+    # plot the rewards
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111)
+    plt.plot(np.arange(len(rewards)), rewards)
+    plt.ylabel('Rewards', fontsize=12)
+    plt.xlabel('Episode #', fontsize=12)
+    plt.show()
 
     # save model
-    agent.Actor.save_weights('./saved_models/ddpg/actor/actor_weights.h5', overwrite=True)
-    agent.Critic.save_weights('./saved_models/ddpg/critic/critic_weights.h5', overwrite=True)
+    # agent.Actor.save_weights('./saved_models/ddpg/actor/actor_weights.h5', overwrite=True)
+    # agent.Critic.save_weights('./saved_models/ddpg/critic/critic_weights.h5', overwrite=True)

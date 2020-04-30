@@ -15,7 +15,7 @@ import gym
 import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Dense, ReLU, Input, concatenate
-from tensorflow.keras.losses import MeanSquaredError
+# from tensorflow.keras.losses import MeanSquaredError
 
 # OU Noise
 from OU_noise import OUNoise
@@ -72,6 +72,7 @@ class wolp_agent:
     def act(self, state, k_candidates):
         proto_action = self.Actor.forward(state)
         # noised_proto_action = proto_action + OU.noise()
+        # print(proto_action)
 
         action = self.refine_action(state, proto_action, k_candidates, target=False)
         try:
@@ -96,6 +97,8 @@ class wolp_agent:
 
         cand_actions = np.array(list(product(*nearest_actions.values())))  # find the power set of the candidate actions
         states = np.tile(state, [cand_actions.shape[0], 1])
+
+        # print(cand_actions)
 
         if target:
             qs = self.Target_Critic.forward(states, cand_actions)  # evaluate by target critic
@@ -138,6 +141,11 @@ class wolp_agent:
         # y = np.expand_dims(rewards, axis=1) + self.gamma * q_next * (1-dones)  # batch_size x 1
         y = np.expand_dims(rewards, axis=1) + self.gamma * q_next * np.expand_dims(1 - dones, axis=1)  # batch_size x 1
 
+        # print(y.shape)
+        # print(rewards.shape)
+        # print(q_next.shape)
+        # print(dones.shape)
+
         self.Critic.train(states, actions, y)
 
         proto_actions = self.Actor.forward(states)
@@ -169,7 +177,7 @@ class ActorNet:
         # create network
         self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
         self.optimizer = tf.train.AdamOptimizer(lr)
-        self.loss = MeanSquaredError()
+        self.loss = tf.keras.losses.mean_squared_error()
         self.model.compile(optimizer=self.optimizer,
                            loss=self.loss)
 
@@ -228,7 +236,7 @@ class CriticNet:
         # create network
         self.model = self.create_net(state_dim, action_dim, fc1_units, fc2_units)
         self.optimizer = tf.train.AdamOptimizer(lr)
-        self.loss = MeanSquaredError()
+        self.loss = tf.keras.losses.mean_squared_error()
         self.model.compile(optimizer=self.optimizer,
                            loss=self.loss)
 
@@ -320,30 +328,28 @@ class ReplayBuffer:
         return states, actions, rewards, next_states, dones
 
 if __name__ == '__main__':
-    # make model dirs
-    os.makedirs('./saved_models/wolp/actor', exist_ok=True)
-    os.makedirs('./saved_models/wolp/critic', exist_ok=True)
+    # # make model dirs
+    # os.makedirs('./saved_models/wolp/actor', exist_ok=True)
+    # os.makedirs('./saved_models/wolp/critic', exist_ok=True)
 
     # saved model path
     actor_path = './saved_models/wolp/actor/actor_weights.h5'
     critic_path = './saved_models/wolp/critic/critic_weights.h5'
 
-    # OU = OUNoise(action_dimension=1, mu=0, theta=0.15, sigma=0.3)
-
     # initialize agent and env
     env = gym.make('SpaceInvaders-ram-v0')
     agent = wolp_agent(
-                state_dim=env.observation_space.shape[0],
-                action_dim=1,
-                lr_a=0.0001,
-                lr_c=0.001,
-                buffer_size=1e5,
-                batch_size=64,
-                a_target_update_steps=1,
-                c_target_update_steps=1,
-                gamma=0.99,
-                tau=0.001,
-                save_graph=False)
+            state_dim=env.observation_space.shape[0],
+            action_dim=1,
+            lr_a=0.00005,
+            lr_c=0.0001,
+            buffer_size=1e5,
+            batch_size=64,
+            a_target_update_steps=1,
+            c_target_update_steps=1,
+            gamma=0.95,
+            tau=0.01,
+            save_graph=False)
     try:
         agent.restore(actor_path, critic_path)
         logging.info('restore saved model')
@@ -354,40 +360,20 @@ if __name__ == '__main__':
     rewards = []                        # list containing scores from each episode
     rewards_window = deque(maxlen=100)  # last 100 scores
 
-    for i_episode in range(1000):
+    for i_episode in range(200):
+        steps = 0
         ep_start_time = time.time()
         eps_reward = 0
         state = env.reset()
 
-        # if i_episode % 50 == 0:
-        #     tf.keras.backend.clear_session()
-        #     # tf.reset_default_graph()
-        #     agent = wolp_agent(
-        #         state_dim=env.observation_space.shape[0],
-        #         action_dim=1,
-        #         lr_a=0.00001,
-        #         lr_c=0.0001,
-        #         buffer_size=1e5,
-        #         batch_size=32,
-        #         a_target_update_steps=1,
-        #         c_target_update_steps=1,
-        #         gamma=0.95,
-        #         tau=0.1,
-        #         save_graph=False)
-        #     try:
-        #         agent.restore(actor_path, critic_path)
-        #         logging.info('restore saved model')
-        #     except:
-        #         pass
-
         while True:
-            env.render()
+            # env.render()
             # if len(agent.Buffer.memory) < agent.buffer_size:
             #     action = np.random.choice(env.action_space.n)
             # else:
-            #     action = agent.act(state, 2)
-
             action = agent.act(state, 2)
+
+            # action = agent.act(state, 2)
             next_state, reward, done, _ = env.step(action)
             if (next_state == state).all():
                 action = np.random.choice(env.action_space.n)
@@ -396,20 +382,23 @@ if __name__ == '__main__':
             agent.store(state, action, reward, next_state, done)
 
             if len(agent.Buffer.memory) == agent.buffer_size:
+                # print('agent is learning')
                 agent.learn()
 
             state = next_state
             eps_reward += reward
+            steps += 1
             if done:
+                # print(steps)
                 break
 
         rewards_window.append(eps_reward)  # save most recent score
         rewards.append(eps_reward)  # save most recent score
         print('\rEpisode {}\tAverage Score: {:.2f} | completed in {:.2f} s'.format(i_episode, np.mean(rewards_window), time.time() - ep_start_time))
-        if np.mean(rewards_window) > 300:
+
+        if np.mean(rewards_window) > 350:
             print('Env solved!')
             agent.save(actor_path, critic_path)
-            # save replay memory
             break
 
         agent.save(actor_path, critic_path)
