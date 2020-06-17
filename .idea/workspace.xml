@@ -3,18 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c1ca5fae-f3ff-40b2-a274-cc2b04272c1f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/DDPG.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/Experiments.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/agents/Experiments.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/OU_noise.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/Wolpertinger.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/Wolpertinger_bn.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/logs/events.out.tfevents.1582678847.HONGLAN-DELLXPS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/ddpg/actor/actor_weights.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/ddpg/critic/critic_weights.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp/actor/actor_weights.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp/critic/critic_weights.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp_bn/actor/actor_weights.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agents/saved_models/wolp_bn/critic/critic_weights.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/ddpg/DDPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/ddpg/DDPG.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,13 +14,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="103" selection-start-line="103" selection-end-line="103" />
+            <state relative-caret-position="1035">
+              <caret line="368" selection-start-line="368" selection-end-line="368" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#2309#2854#0" />
+                <element signature="e#2926#2984#0" />
+                <element signature="e#3352#4742#0" />
+                <element signature="e#4339#4420#0" />
+                <element signature="e#4478#4559#0" />
+                <element signature="e#4651#7692#0" />
+                <element signature="e#4892#4908#0" />
+                <element signature="e#5951#5980#0" />
+                <element signature="e#6072#6101#0" />
+                <element signature="e#6461#6602#0" />
+                <element signature="e#6655#7198#0" />
+                <element signature="e#6655#6805#1" />
+                <element signature="e#6814#6856#0" />
+                <element signature="e#7055#7197#0" />
+                <element signature="e#7248#7283#0" />
+                <element signature="e#7349#7405#0" />
+                <element signature="e#7453#7692#0" />
+                <element signature="e#8742#8808#0" />
+                <element signature="e#9461#9718#0" />
+                <element signature="e#10379#10452#0" />
+                <element signature="e#10578#10613#0" />
+                <element signature="e#10679#10735#0" />
+                <element signature="e#10784#11026#0" />
+                <element signature="e#11128#12575#0" />
+                <element signature="e#11189#11314#0" />
+                <element signature="e#12306#12395#0" />
+                <element signature="e#12485#12575#0" />
+                <element signature="e#13403#13460#0" />
+                <element signature="e#14520#15498#0" />
+                <element signature="e#14631#15076#0" />
+                <element signature="e#14909#14967#0" />
+                <element signature="e#15412#15498#0" />
+                <element signature="e#15755#15767#0" />
               </folding>
             </state>
           </provider>
@@ -38,62 +61,8 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agents/ddpg/OU_noise.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1253">
-              <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
-              <folding>
-                <element signature="e#481#491#0" />
-                <element signature="e#1334#1346#0" />
-                <element signature="e#2698#2756#0" />
-                <element signature="e#2787#3848#0" />
-                <element signature="e#2945#2961#0" />
-                <element signature="e#3903#3984#0" />
-                <element signature="e#4042#4123#0" />
-                <element signature="e#4329#5322#0" />
-                <element signature="e#4456#4472#0" />
-                <element signature="e#6113#6254#0" />
-                <element signature="e#6307#7002#0" />
-                <element signature="e#6307#6457#1" />
-                <element signature="e#6466#6508#0" />
-                <element signature="e#6707#6849#0" />
-                <element signature="e#6860#6879#0" />
-                <element signature="e#7052#7087#0" />
-                <element signature="e#7153#7209#0" />
-                <element signature="e#7257#7496#0" />
-                <element signature="e#7705#8854#0" />
-                <element signature="e#8029#8079#0" />
-                <element signature="e#8245#8329#0" />
-                <element signature="e#9760#10017#0" />
-                <element signature="e#10068#10354#0" />
-                <element signature="e#10119#10215#0" />
-                <element signature="e#10226#10279#0" />
-                <element signature="e#10413#11071#0" />
-                <element signature="e#10618#10679#0" />
-                <element signature="e#11121#11156#0" />
-                <element signature="e#11222#11278#0" />
-                <element signature="e#11327#11569#0" />
-                <element signature="e#11671#13118#0" />
-                <element signature="e#11732#11857#0" />
-                <element signature="e#11929#12113#0" />
-                <element signature="e#12157#12759#0" />
-                <element signature="e#12330#12616#1" />
-                <element signature="e#12809#12938#0" />
-                <element signature="e#12849#12938#0" />
-                <element signature="e#12988#13118#0" />
-                <element signature="e#13028#13118#0" />
-                <element signature="e#13303#13432#0" />
-                <element signature="e#13466#13660#0" />
-                <element signature="e#13691#13763#0" />
-                <element signature="e#13797#13879#0" />
-                <element signature="e#13946#14003#0" />
-                <element signature="e#16239#16251#0" />
-              </folding>
-            </state>
+            <state relative-caret-position="-340" />
           </provider>
         </entry>
       </file>
@@ -117,8 +86,9 @@
         <option value="$PROJECT_DIR$/agents/DDPG.py" />
         <option value="$PROJECT_DIR$/agents/DDPG_v1.py" />
         <option value="$PROJECT_DIR$/agents/ddpg/DDPG_tf2.py" />
-        <option value="$PROJECT_DIR$/agents/ddpg/DDPG.py" />
         <option value="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" />
+        <option value="$PROJECT_DIR$/agents/ddpg/DDPG_v2.py" />
+        <option value="$PROJECT_DIR$/agents/ddpg/DDPG.py" />
       </list>
     </option>
   </component>
@@ -171,7 +141,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Examples/MorvanZhou" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Examples/ReinforcementLearning" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -180,7 +150,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -203,14 +173,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.DDPG_v1">
+  <component name="RunManager" selected="Python.DDPG">
     <configuration name="DDPG" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="C:\Users\vince\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -252,6 +219,9 @@
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="C:\Users\vince\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -259,6 +229,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="DDPG_v2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DQN" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\vince\Anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents/ddpg" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/agents/ddpg/DDPG_v2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -281,28 +270,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/agents/DQN.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Wolpertinger" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="DQN" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/agents/Wolpertinger.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -358,18 +325,18 @@
     <list>
       <item itemvalue="Python.DQN" />
       <item itemvalue="Python.DDPG" />
-      <item itemvalue="Python.Wolpertinger" />
       <item itemvalue="Python.Wolpertinger_tf2" />
       <item itemvalue="Python.DDPG_v1" />
       <item itemvalue="Python.DDPG_tf2" />
+      <item itemvalue="Python.DDPG_v2" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.DDPG_v1" />
         <item itemvalue="Python.DDPG" />
+        <item itemvalue="Python.DDPG_v2" />
+        <item itemvalue="Python.DDPG_v1" />
         <item itemvalue="Python.DDPG_tf2" />
         <item itemvalue="Python.Wolpertinger_tf2" />
-        <item itemvalue="Python.Wolpertinger" />
       </list>
     </recent_temporary>
   </component>
@@ -455,7 +422,8 @@
       <workItem from="1591646314881" duration="4404000" />
       <workItem from="1592079529114" duration="46704000" />
       <workItem from="1592249029826" duration="13463000" />
-      <workItem from="1592374959943" duration="2037000" />
+      <workItem from="1592374959943" duration="6298000" />
+      <workItem from="1592418526433" duration="6017000" />
     </task>
     <task id="LOCAL-00001" summary="hh">
       <created>1563046370966</created>
@@ -468,13 +436,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67562000" />
+    <option name="totallyTimeSpent" value="77840000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1292" height="692" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23220065" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23624596" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -489,11 +456,11 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" visible="true" weight="0.31914893" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" visible="true" weight="0.39361703" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.74757284" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.7394822" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -591,69 +558,124 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG.py">
+    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="103" selection-start-line="103" selection-end-line="103" />
+        <state relative-caret-position="471">
+          <caret line="366" column="90" lean-forward="true" selection-start-line="366" selection-start-column="90" selection-end-line="366" selection-end-column="90" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#481#491#0" />
+            <element signature="e#1334#1346#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2227">
+          <caret line="436" column="95" lean-forward="true" selection-start-line="436" selection-start-column="95" selection-end-line="436" selection-end-column="95" />
+          <folding>
+            <element signature="e#524#595#0" />
+            <element signature="e#738#4559#0" />
+            <element signature="e#1034#2273#0" />
+            <element signature="e#1334#1346#0" />
+            <element signature="e#2309#2854#0" />
+            <element signature="e#2534#2556#0" />
+            <element signature="e#2926#2984#0" />
+            <element signature="e#3015#4284#0" />
+            <element signature="e#3520#3643#0" />
+            <element signature="e#3652#3665#0" />
+            <element signature="e#4339#4420#0" />
+            <element signature="e#4478#4559#0" />
+            <element signature="e#4651#7682#0" />
+            <element signature="e#4765#5759#0" />
+            <element signature="e#4892#4908#0" />
+            <element signature="e#5854#6411#0" />
+            <element signature="e#5946#5975#0" />
+            <element signature="e#6062#6091#0" />
+            <element signature="e#6451#6592#0" />
+            <element signature="e#6645#7188#0" />
+            <element signature="e#6645#6795#1" />
+            <element signature="e#6804#6846#0" />
+            <element signature="e#7045#7187#0" />
+            <element signature="e#7238#7273#0" />
+            <element signature="e#7339#7395#0" />
+            <element signature="e#7443#7682#0" />
+            <element signature="e#8604#9395#0" />
+            <element signature="e#8713#8733#0" />
+            <element signature="e#9132#9197#0" />
+            <element signature="e#9443#9700#0" />
+            <element signature="e#9751#9864#0" />
+            <element signature="e#10128#10189#0" />
+            <element signature="e#10558#10593#0" />
+            <element signature="e#10659#10715#0" />
+            <element signature="e#10764#11006#0" />
+            <element signature="e#11108#12555#0" />
+            <element signature="e#11169#11294#0" />
+            <element signature="e#11366#11550#0" />
+            <element signature="e#11594#12196#0" />
+            <element signature="e#11767#12053#1" />
+            <element signature="e#12246#12375#0" />
+            <element signature="e#12286#12375#0" />
+            <element signature="e#12425#12555#0" />
+            <element signature="e#12465#12555#0" />
+            <element signature="e#12668#13316#0" />
+            <element signature="e#12740#12869#0" />
+            <element signature="e#12903#13097#0" />
+            <element signature="e#13128#13200#0" />
+            <element signature="e#13234#13316#0" />
+            <element signature="e#13383#13440#0" />
+            <element signature="e#14199#14269#0" />
+            <element signature="e#14889#14947#0" />
+            <element signature="e#15392#15478#0" />
+            <element signature="e#15735#15747#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agents/ddpg/OU_noise.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1253">
-          <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
+        <state relative-caret-position="-340" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1035">
+          <caret line="368" selection-start-line="368" selection-end-line="368" />
           <folding>
-            <element signature="e#481#491#0" />
-            <element signature="e#1334#1346#0" />
-            <element signature="e#2698#2756#0" />
-            <element signature="e#2787#3848#0" />
-            <element signature="e#2945#2961#0" />
-            <element signature="e#3903#3984#0" />
-            <element signature="e#4042#4123#0" />
-            <element signature="e#4329#5322#0" />
-            <element signature="e#4456#4472#0" />
-            <element signature="e#6113#6254#0" />
-            <element signature="e#6307#7002#0" />
-            <element signature="e#6307#6457#1" />
-            <element signature="e#6466#6508#0" />
-            <element signature="e#6707#6849#0" />
-            <element signature="e#6860#6879#0" />
-            <element signature="e#7052#7087#0" />
-            <element signature="e#7153#7209#0" />
-            <element signature="e#7257#7496#0" />
-            <element signature="e#7705#8854#0" />
-            <element signature="e#8029#8079#0" />
-            <element signature="e#8245#8329#0" />
-            <element signature="e#9760#10017#0" />
-            <element signature="e#10068#10354#0" />
-            <element signature="e#10119#10215#0" />
-            <element signature="e#10226#10279#0" />
-            <element signature="e#10413#11071#0" />
-            <element signature="e#10618#10679#0" />
-            <element signature="e#11121#11156#0" />
-            <element signature="e#11222#11278#0" />
-            <element signature="e#11327#11569#0" />
-            <element signature="e#11671#13118#0" />
-            <element signature="e#11732#11857#0" />
-            <element signature="e#11929#12113#0" />
-            <element signature="e#12157#12759#0" />
-            <element signature="e#12330#12616#1" />
-            <element signature="e#12809#12938#0" />
-            <element signature="e#12849#12938#0" />
-            <element signature="e#12988#13118#0" />
-            <element signature="e#13028#13118#0" />
-            <element signature="e#13303#13432#0" />
-            <element signature="e#13466#13660#0" />
-            <element signature="e#13691#13763#0" />
-            <element signature="e#13797#13879#0" />
-            <element signature="e#13946#14003#0" />
-            <element signature="e#16239#16251#0" />
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#2309#2854#0" />
+            <element signature="e#2926#2984#0" />
+            <element signature="e#3352#4742#0" />
+            <element signature="e#4339#4420#0" />
+            <element signature="e#4478#4559#0" />
+            <element signature="e#4651#7692#0" />
+            <element signature="e#4892#4908#0" />
+            <element signature="e#5951#5980#0" />
+            <element signature="e#6072#6101#0" />
+            <element signature="e#6461#6602#0" />
+            <element signature="e#6655#7198#0" />
+            <element signature="e#6655#6805#1" />
+            <element signature="e#6814#6856#0" />
+            <element signature="e#7055#7197#0" />
+            <element signature="e#7248#7283#0" />
+            <element signature="e#7349#7405#0" />
+            <element signature="e#7453#7692#0" />
+            <element signature="e#8742#8808#0" />
+            <element signature="e#9461#9718#0" />
+            <element signature="e#10379#10452#0" />
+            <element signature="e#10578#10613#0" />
+            <element signature="e#10679#10735#0" />
+            <element signature="e#10784#11026#0" />
+            <element signature="e#11128#12575#0" />
+            <element signature="e#11189#11314#0" />
+            <element signature="e#12306#12395#0" />
+            <element signature="e#12485#12575#0" />
+            <element signature="e#13403#13460#0" />
+            <element signature="e#14520#15498#0" />
+            <element signature="e#14631#15076#0" />
+            <element signature="e#14909#14967#0" />
+            <element signature="e#15412#15498#0" />
+            <element signature="e#15755#15767#0" />
           </folding>
         </state>
       </provider>

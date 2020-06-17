@@ -34,11 +34,7 @@ class DDPG:
                  batch_size,
                  gamma,
                  tau,
-                 epsilon,
-                 epsilon_decay,
-                 epsilon_min,
                  save_graph):
-
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.action_range = action_range
@@ -49,42 +45,30 @@ class DDPG:
         self.batch_size = int(batch_size)
         self.tau = tau
 
-        self.epsilon = epsilon
-        self.epsilon_decay = epsilon_decay
-        self.epsilon_min = epsilon_min
-
         # tf session
         # config = tf.compat.v1.ConfigProto()
         # config.gpu_options.allow_growth = True
         self.sess = tf.Session()
-        K.set_session(self.sess)
 
         # replay buffer
         self.Buffer = ReplayBuffer(self.buffer_size)
 
         # create actor and critic networks
-        self.Actor = ActorNet(self.sess, self.state_dim, self.action_dim, self.action_range, 60, 30, self.lr_a, self.tau, self.batch_size)
-        self.Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 60, 30, self.lr_c, self.tau)
-        self.Target_Actor = ActorNet(self.sess, self.state_dim, self.action_dim, self.action_range, 60, 30, self.lr_a, self.tau, self.batch_size)
-        self.Target_Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 60, 30, self.lr_c, self.tau)
+        self.Actor = ActorNet(self.sess, self.state_dim, self.action_dim, self.action_range, 40, 30, self.lr_a, self.tau, self.batch_size)
+        self.Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 40, 30, self.lr_c, self.tau)
+        self.Target_Actor = ActorNet(self.sess, self.state_dim, self.action_dim, self.action_range, 40, 30, self.lr_a, self.tau, self.batch_size)
+        self.Target_Critic = CriticNet(self.sess, self.state_dim, self.action_dim, 40, 30, self.lr_c, self.tau)
 
         # initialize variables
         self.sess.run(tf.global_variables_initializer())
 
-        self.Target_Actor.model.set_weights(self.Actor.model.get_weights())
-        self.Target_Critic.model.set_weights(self.Critic.model.get_weights())
-
-        # if save_graph:
-        #     tf.summary.FileWriter('./logs/', self.sess.graph)
+        if save_graph:
+            tf.summary.FileWriter('./logs/', self.sess.graph)
 
     def act(self, state):
         raw_action = self.Actor.forward(state)
-
-        noise = max(self.epsilon, 0) * OU.noise()
-
         # print(raw_action)
-        noised_action = raw_action + noise
-        # noised_action = raw_action + OU(x=raw_action)
+        noised_action = raw_action + OU.noise()
         noised_action = np.clip(noised_action.flatten(), env.action_space.low, env.action_space.high)
         # print(noised_action)
 
@@ -127,13 +111,8 @@ class DDPG:
         # print(action_grads.shape)
         self.Actor.train(states, action_grads)
 
-        # OU.reset()
-
         self.Target_Actor.soft_update(self.Actor.model)
         self.Target_Critic.soft_update(self.Critic.model)
-
-        if self.epsilon >= self.epsilon_min:
-            self.epsilon *= self.epsilon_decay
 
     def save(self, actor_path, critic_path):
         self.Actor.save_weights(actor_path)
@@ -163,7 +142,6 @@ class ActorNet:
 
         self.grads = tf.gradients(self.model.outputs, self.actor_params, -self.action_grads)
 
-        # print(self.grads[0])
         # self.normalized_grads = list(map(lambda x: tf.div(x, self.batch_size), self.grads))
 
         self.train_op = self.optimizer.apply_gradients(zip(self.grads, self.actor_params))
@@ -180,8 +158,8 @@ class ActorNet:
         # x = BatchNormalization()(x)
         # x = ReLU()(x)
         x = Dense(action_dim,
-                  activation='tanh',
-                  kernel_initializer=initializers.RandomUniform())(x)
+                  kernel_initializer=initializers.RandomUniform(),
+                  activation='tanh')(x)
 
         out = Lambda(lambda i: i * action_range)(x)
         # out = action_range * out
@@ -244,21 +222,21 @@ class CriticNet:
 
         self.critic_params = self.model.trainable_variables
         # self.action_grads = tf.gradients(self.model.output, self.model.inputs[1])  # dQ/da
-        self.action_grads = tf.gradients(self.model.outputs, self.a_in)  # dQ/da
-        self.loss_hist = []
+        # self.action_grads = tf.gradients(self.model.outputs, self.a_in)  # dQ/da
+        self.action_grads = K.gradients(self.model.outputs, self.a_in)  # dQ/da
 
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
         A = Input(shape=(action_dim,))
         s = Dense(fc1_units)(S)
-        s = ReLU()(s)
+        # s = LeakyReLU()(s)
         # s = BatchNormalization()(s)  # batch norm after processing state
         # s = ReLU()(s)
         # s = Dense(fc2_units, activation='relu')(s)
         a = Dense(fc1_units)(A)
-        a = ReLU()(a)
+        # a = LeakyReLU()(a)
         x = concatenate([s, a], axis=1)   # concat transformed state and raw action as input for fc2
-        # x = ReLU()(x)
+        x = ReLU()(x)
         x = Dense(fc2_units)(x)
         x = ReLU()(x)
         # x = BatchNormalization()(x) # batch norm after processing state
@@ -283,9 +261,8 @@ class CriticNet:
         return q
 
     def train(self, states, actions, y):
-        loss = self.model.train_on_batch(x=[states, actions], y=y)
+        self.model.train_on_batch(x=[states, actions], y=y)
         # self.model.fit(x=[states, actions], y=y, verbose=0)
-        self.loss_hist.append(loss)
 
     def get_action_grads(self, states, actions):
         if len(states.shape) < 2:
@@ -303,8 +280,6 @@ class CriticNet:
             self.s_in: states,
             self.a_in: actions
         })[0]
-
-        # print(action_grads)
 
         action_grads /= states.shape[0]
 
@@ -364,17 +339,40 @@ class ReplayBuffer:
             self.memory = pickle.load(f)
             f.close()
 
+############################## OU Noise #############################
+
+class OrnsteinUhlenbeckActionNoise:
+    def __init__(self, mu, sigma=0.2, theta=.15, dt=1e-2, x0=None):
+        self.theta = theta
+        self.mu = mu
+        self.sigma = sigma
+        self.dt = dt
+        self.x0 = x0
+        self.reset()
+
+    def __call__(self):
+        x = self.x_prev + self.theta * (self.mu - self.x_prev) * self.dt + \
+                self.sigma * np.sqrt(self.dt) * np.random.normal(size=self.mu.shape)
+        self.x_prev = x
+        return x
+
+    def reset(self):
+        self.x_prev = self.x0 if self.x0 is not None else np.zeros_like(self.mu)
+
+    def __repr__(self):
+        return 'OrnsteinUhlenbeckActionNoise(mu={}, sigma={})'.format(self.mu, self.sigma)
+
 if __name__ == '__main__':
     env = gym.make('Pendulum-v0')
-
     # os.makedirs('./saved_models/ddpg/actor', exist_ok=True)
     # os.makedirs('./saved_models/ddpg/critic', exist_ok=True)
     ACTOR_PATH = '../saved_models/ddpg/actor/actor_weights.h5'
     CRITIC_PATH = '../saved_models/ddpg/critic/critic_weights.h5'
     REPLAY_START = 1e3
 
+    # OU = OrnsteinUhlenbeckActionNoise(mu=np.zeros(env.action_space.shape[0]))
     OU = OUNoise(action_dimension=env.action_space.shape[0])
-    OU.reset()
+
     agent = DDPG(state_dim=env.observation_space.shape[0],
                  action_dim=env.action_space.shape[0],
                  action_range=env.action_space.high,
@@ -384,9 +382,6 @@ if __name__ == '__main__':
                  batch_size=32,
                  gamma=0.95,
                  tau=0.01,
-                 epsilon=1.0,
-                 epsilon_decay=0.995,
-                 epsilon_min=0.01,
                  save_graph=False)
     try:
         agent.restore(ACTOR_PATH, CRITIC_PATH)
@@ -432,7 +427,7 @@ if __name__ == '__main__':
     # plot the rewards
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111)
-    plt.plot(np.arange(len(rewards)), rewards)
+    plt.plot(np.arange(len(rewards)), rewards, linewidth=0.3)
     plt.ylabel('Rewards', fontsize=12)
     plt.xlabel('Episode #', fontsize=12)
     plt.show()

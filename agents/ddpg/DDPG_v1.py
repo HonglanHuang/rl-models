@@ -136,10 +136,10 @@ class ActorNet:
     def create_net(self, state_dim, action_dim, action_range, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
         x = Dense(fc1_units)(S)
-        # x = BatchNormalization()(x)
+        x = BatchNormalization()(x)
         x = ReLU()(x)
         x = Dense(fc2_units)(x)
-        # x = BatchNormalization()(x)
+        x = BatchNormalization()(x)
         x = ReLU()(x)
         x = Dense(action_dim,
                   # kernel_initializer=initializers.RandomUniform(-3e-3, 3e-3),
@@ -379,7 +379,7 @@ if __name__ == '__main__':
                  action_dim=env.action_space.shape[0],
                  action_range=env.action_space.high,
                  lr_a=0.001,
-                 lr_c=0.002,
+                 lr_c=0.005,
                  buffer_size=1e4,
                  batch_size=32,
                  gamma=0.9,
