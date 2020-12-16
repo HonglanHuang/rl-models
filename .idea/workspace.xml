@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1ca5fae-f3ff-40b2-a274-cc2b04272c1f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/agents/wolpertinger/Wolpertinger_v1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agents/ddpg/DDPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/ddpg/DDPG.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/ddpg/DDPG_v2.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,55 +16,71 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="368" selection-start-line="368" selection-end-line="368" />
+            <state relative-caret-position="85">
+              <caret line="31" selection-start-line="31" selection-end-line="40" selection-end-column="27" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <element signature="e#2309#2854#0" />
-                <element signature="e#2926#2984#0" />
-                <element signature="e#3352#4742#0" />
-                <element signature="e#4339#4420#0" />
-                <element signature="e#4478#4559#0" />
-                <element signature="e#4651#7692#0" />
-                <element signature="e#4892#4908#0" />
-                <element signature="e#5951#5980#0" />
-                <element signature="e#6072#6101#0" />
-                <element signature="e#6461#6602#0" />
-                <element signature="e#6655#7198#0" />
-                <element signature="e#6655#6805#1" />
-                <element signature="e#6814#6856#0" />
-                <element signature="e#7055#7197#0" />
-                <element signature="e#7248#7283#0" />
-                <element signature="e#7349#7405#0" />
-                <element signature="e#7453#7692#0" />
-                <element signature="e#8742#8808#0" />
-                <element signature="e#9461#9718#0" />
-                <element signature="e#10379#10452#0" />
-                <element signature="e#10578#10613#0" />
-                <element signature="e#10679#10735#0" />
-                <element signature="e#10784#11026#0" />
-                <element signature="e#11128#12575#0" />
-                <element signature="e#11189#11314#0" />
-                <element signature="e#12306#12395#0" />
-                <element signature="e#12485#12575#0" />
-                <element signature="e#13403#13460#0" />
-                <element signature="e#14520#15498#0" />
-                <element signature="e#14631#15076#0" />
-                <element signature="e#14909#14967#0" />
-                <element signature="e#15412#15498#0" />
-                <element signature="e#15755#15767#0" />
+                <element signature="e#522#593#0" />
+                <element signature="e#1535#1547#0" />
+                <element signature="e#2586#2602#0" />
+                <element signature="e#2702#3350#0" />
+                <element signature="e#3030#3052#0" />
+                <element signature="e#3422#3480#0" />
+                <element signature="e#3511#4956#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agents/ddpg/OU_noise.py">
+        <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-340" />
+            <state relative-caret-position="1449">
+              <caret line="119" selection-start-line="119" selection-end-line="119" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#522#593#0" />
+                <element signature="e#1535#1547#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/agents/wolpertinger/Wolpertinger_v1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-404">
+              <caret line="43" column="29" lean-forward="true" selection-start-line="43" selection-start-column="29" selection-end-line="43" selection-end-column="29" />
+              <folding>
+                <element signature="e#340#394#0" />
+                <element signature="e#478#549#0" />
+                <element signature="e#2268#2797#0" />
+                <element signature="e#2317#2338#0" />
+                <element signature="e#2879#4717#0" />
+                <element signature="e#3325#3469#0" />
+                <element signature="e#3559#4186#0" />
+                <element signature="e#4789#4847#0" />
+                <element signature="e#4878#6550#0" />
+                <element signature="e#5603#5623#0" />
+                <element signature="e#6067#6083#0" />
+                <element signature="e#6605#6686#0" />
+                <element signature="e#6744#6825#0" />
+                <element signature="e#14474#17054#0" />
+                <element signature="e#14474#14493#0" />
+                <element signature="e#15148#15230#0" />
+                <element signature="e#15455#16933#0" />
+                <element signature="e#15585#16424#0" />
+                <element signature="e#15585#15599#0" />
+                <element signature="e#15951#16059#0" />
+                <element signature="e#16204#16262#0" />
+                <element signature="e#16388#16424#0" />
+                <element signature="e#16759#16845#0" />
+                <element signature="e#16955#16971#0" />
+              </folding>
+            </state>
           </provider>
         </entry>
       </file>
@@ -86,17 +104,18 @@
         <option value="$PROJECT_DIR$/agents/DDPG.py" />
         <option value="$PROJECT_DIR$/agents/DDPG_v1.py" />
         <option value="$PROJECT_DIR$/agents/ddpg/DDPG_tf2.py" />
-        <option value="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" />
         <option value="$PROJECT_DIR$/agents/ddpg/DDPG_v2.py" />
+        <option value="$PROJECT_DIR$/agents/ddpg/DDPG_v1.py" />
         <option value="$PROJECT_DIR$/agents/ddpg/DDPG.py" />
+        <option value="$PROJECT_DIR$/agents/wolpertinger/Wolpertinger_v1.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-210" />
-    <option name="y" value="144" />
-    <option name="width" value="3780" />
-    <option name="height" value="1680" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="3855" />
+    <option name="height" value="2055" />
   </component>
   <component name="ProjectId" id="1OUXdLqYNMiVUbX5Zb6ovlgm9Tz" />
   <component name="ProjectLevelVcsManager">
@@ -107,7 +126,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -126,10 +144,17 @@
               <item name="agents" type="462c0819:PsiDirectoryNode" />
               <item name="ddpg" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="rl-models" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rl-models" type="462c0819:PsiDirectoryNode" />
+              <item name="agents" type="462c0819:PsiDirectoryNode" />
+              <item name="wolpertinger" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -141,7 +166,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Examples/ReinforcementLearning" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/agents/wolpertinger" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -160,6 +185,11 @@
         <option name="myWorkingDirectory" value="$PROJECT_DIR$/agents" />
       </console-settings>
     </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vince\OneDrive\Desktop\RL code\My_Codes\rl-models\agents\wolpertinger" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -241,6 +271,9 @@
       <module name="DQN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="C:\Users\vince\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agents/ddpg" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -333,8 +366,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.DDPG" />
-        <item itemvalue="Python.DDPG_v2" />
         <item itemvalue="Python.DDPG_v1" />
+        <item itemvalue="Python.DDPG_v2" />
         <item itemvalue="Python.DDPG_tf2" />
         <item itemvalue="Python.Wolpertinger_tf2" />
       </list>
@@ -424,6 +457,9 @@
       <workItem from="1592249029826" duration="13463000" />
       <workItem from="1592374959943" duration="6298000" />
       <workItem from="1592418526433" duration="6017000" />
+      <workItem from="1592427389793" duration="18575000" />
+      <workItem from="1592531968661" duration="1907000" />
+      <workItem from="1608081102085" duration="970000" />
     </task>
     <task id="LOCAL-00001" summary="hh">
       <created>1563046370966</created>
@@ -436,12 +472,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77840000" />
+    <option name="totallyTimeSpent" value="99292000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1292" height="692" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23624596" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24838188" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -456,11 +493,11 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" visible="true" weight="0.39361703" />
+      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.3173759" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.7394822" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.7354369" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -558,124 +595,139 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
+    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v2.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/tensorflow/python/keras/engine/base_layer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="366" column="90" lean-forward="true" selection-start-line="366" selection-start-column="90" selection-end-line="366" selection-end-column="90" />
-          <folding>
-            <element signature="e#481#491#0" />
-            <element signature="e#1334#1346#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2227">
-          <caret line="436" column="95" lean-forward="true" selection-start-line="436" selection-start-column="95" selection-end-line="436" selection-end-column="95" />
-          <folding>
-            <element signature="e#524#595#0" />
-            <element signature="e#738#4559#0" />
-            <element signature="e#1034#2273#0" />
-            <element signature="e#1334#1346#0" />
-            <element signature="e#2309#2854#0" />
-            <element signature="e#2534#2556#0" />
-            <element signature="e#2926#2984#0" />
-            <element signature="e#3015#4284#0" />
-            <element signature="e#3520#3643#0" />
-            <element signature="e#3652#3665#0" />
-            <element signature="e#4339#4420#0" />
-            <element signature="e#4478#4559#0" />
-            <element signature="e#4651#7682#0" />
-            <element signature="e#4765#5759#0" />
-            <element signature="e#4892#4908#0" />
-            <element signature="e#5854#6411#0" />
-            <element signature="e#5946#5975#0" />
-            <element signature="e#6062#6091#0" />
-            <element signature="e#6451#6592#0" />
-            <element signature="e#6645#7188#0" />
-            <element signature="e#6645#6795#1" />
-            <element signature="e#6804#6846#0" />
-            <element signature="e#7045#7187#0" />
-            <element signature="e#7238#7273#0" />
-            <element signature="e#7339#7395#0" />
-            <element signature="e#7443#7682#0" />
-            <element signature="e#8604#9395#0" />
-            <element signature="e#8713#8733#0" />
-            <element signature="e#9132#9197#0" />
-            <element signature="e#9443#9700#0" />
-            <element signature="e#9751#9864#0" />
-            <element signature="e#10128#10189#0" />
-            <element signature="e#10558#10593#0" />
-            <element signature="e#10659#10715#0" />
-            <element signature="e#10764#11006#0" />
-            <element signature="e#11108#12555#0" />
-            <element signature="e#11169#11294#0" />
-            <element signature="e#11366#11550#0" />
-            <element signature="e#11594#12196#0" />
-            <element signature="e#11767#12053#1" />
-            <element signature="e#12246#12375#0" />
-            <element signature="e#12286#12375#0" />
-            <element signature="e#12425#12555#0" />
-            <element signature="e#12465#12555#0" />
-            <element signature="e#12668#13316#0" />
-            <element signature="e#12740#12869#0" />
-            <element signature="e#12903#13097#0" />
-            <element signature="e#13128#13200#0" />
-            <element signature="e#13234#13316#0" />
-            <element signature="e#13383#13440#0" />
-            <element signature="e#14199#14269#0" />
-            <element signature="e#14889#14947#0" />
-            <element signature="e#15392#15478#0" />
-            <element signature="e#15735#15747#0" />
-          </folding>
+        <state relative-caret-position="125">
+          <caret line="610" selection-start-line="610" selection-end-line="610" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agents/ddpg/OU_noise.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/wolpertinger/Wolpertinger.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-340" />
+        <state relative-caret-position="514">
+          <caret line="261" lean-forward="true" selection-start-line="261" selection-end-line="261" />
+          <folding>
+            <element signature="e#340#394#0" />
+            <element signature="e#478#549#0" />
+            <element signature="e#1025#2232#0" />
+            <element signature="e#2268#2797#0" />
+            <element signature="e#2317#2338#0" />
+            <element signature="e#2879#4717#0" />
+            <element signature="e#3325#3469#0" />
+            <element signature="e#3559#4186#0" />
+            <element signature="e#4789#4847#0" />
+            <element signature="e#4878#6550#0" />
+            <element signature="e#5603#5623#0" />
+            <element signature="e#6067#6083#0" />
+            <element signature="e#6605#6686#0" />
+            <element signature="e#6744#6825#0" />
+            <element signature="e#6917#9696#0" />
+            <element signature="e#7019#7652#0" />
+            <element signature="e#7747#8389#0" />
+            <element signature="e#8429#8654#0" />
+            <element signature="e#8707#9202#0" />
+            <element signature="e#8707#8857#1" />
+            <element signature="e#8905#9049#0" />
+            <element signature="e#9060#9079#0" />
+            <element signature="e#9252#9287#0" />
+            <element signature="e#9353#9409#0" />
+            <element signature="e#9457#9696#0" />
+            <element signature="e#9790#12892#0" />
+            <element signature="e#9905#10406#0" />
+            <element signature="e#10487#11498#0" />
+            <element signature="e#11546#11802#0" />
+            <element signature="e#11853#11904#0" />
+            <element signature="e#11963#12394#0" />
+            <element signature="e#12226#12321#0" />
+            <element signature="e#12444#12479#0" />
+            <element signature="e#12545#12601#0" />
+            <element signature="e#12650#12892#0" />
+            <element signature="e#12994#14441#0" />
+            <element signature="e#13055#13180#0" />
+            <element signature="e#13252#13436#0" />
+            <element signature="e#13480#14082#0" />
+            <element signature="e#13653#13939#1" />
+            <element signature="e#14132#14261#0" />
+            <element signature="e#14172#14261#0" />
+            <element signature="e#14311#14441#0" />
+            <element signature="e#14351#14441#0" />
+            <element signature="e#14474#17054#0" />
+            <element signature="e#14474#14493#0" />
+            <element signature="e#15148#15230#0" />
+            <element signature="e#15455#16933#0" />
+            <element signature="e#15585#16424#0" />
+            <element signature="e#15585#15599#0" />
+            <element signature="e#15951#16059#0" />
+            <element signature="e#16204#16262#0" />
+            <element signature="e#16388#16424#0" />
+            <element signature="e#16759#16845#0" />
+            <element signature="e#16955#16971#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG_v1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1449">
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#522#593#0" />
+            <element signature="e#1535#1547#0" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agents/ddpg/DDPG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="368" selection-start-line="368" selection-end-line="368" />
+        <state relative-caret-position="85">
+          <caret line="31" selection-start-line="31" selection-end-line="40" selection-end-column="27" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <element signature="e#2309#2854#0" />
-            <element signature="e#2926#2984#0" />
-            <element signature="e#3352#4742#0" />
-            <element signature="e#4339#4420#0" />
-            <element signature="e#4478#4559#0" />
-            <element signature="e#4651#7692#0" />
-            <element signature="e#4892#4908#0" />
-            <element signature="e#5951#5980#0" />
-            <element signature="e#6072#6101#0" />
-            <element signature="e#6461#6602#0" />
-            <element signature="e#6655#7198#0" />
-            <element signature="e#6655#6805#1" />
-            <element signature="e#6814#6856#0" />
-            <element signature="e#7055#7197#0" />
-            <element signature="e#7248#7283#0" />
-            <element signature="e#7349#7405#0" />
-            <element signature="e#7453#7692#0" />
-            <element signature="e#8742#8808#0" />
-            <element signature="e#9461#9718#0" />
-            <element signature="e#10379#10452#0" />
-            <element signature="e#10578#10613#0" />
-            <element signature="e#10679#10735#0" />
-            <element signature="e#10784#11026#0" />
-            <element signature="e#11128#12575#0" />
-            <element signature="e#11189#11314#0" />
-            <element signature="e#12306#12395#0" />
-            <element signature="e#12485#12575#0" />
-            <element signature="e#13403#13460#0" />
-            <element signature="e#14520#15498#0" />
-            <element signature="e#14631#15076#0" />
-            <element signature="e#14909#14967#0" />
-            <element signature="e#15412#15498#0" />
-            <element signature="e#15755#15767#0" />
+            <element signature="e#522#593#0" />
+            <element signature="e#1535#1547#0" />
+            <element signature="e#2586#2602#0" />
+            <element signature="e#2702#3350#0" />
+            <element signature="e#3030#3052#0" />
+            <element signature="e#3422#3480#0" />
+            <element signature="e#3511#4956#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents/wolpertinger/Wolpertinger_v1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-404">
+          <caret line="43" column="29" lean-forward="true" selection-start-line="43" selection-start-column="29" selection-end-line="43" selection-end-column="29" />
+          <folding>
+            <element signature="e#340#394#0" />
+            <element signature="e#478#549#0" />
+            <element signature="e#2268#2797#0" />
+            <element signature="e#2317#2338#0" />
+            <element signature="e#2879#4717#0" />
+            <element signature="e#3325#3469#0" />
+            <element signature="e#3559#4186#0" />
+            <element signature="e#4789#4847#0" />
+            <element signature="e#4878#6550#0" />
+            <element signature="e#5603#5623#0" />
+            <element signature="e#6067#6083#0" />
+            <element signature="e#6605#6686#0" />
+            <element signature="e#6744#6825#0" />
+            <element signature="e#14474#17054#0" />
+            <element signature="e#14474#14493#0" />
+            <element signature="e#15148#15230#0" />
+            <element signature="e#15455#16933#0" />
+            <element signature="e#15585#16424#0" />
+            <element signature="e#15585#15599#0" />
+            <element signature="e#15951#16059#0" />
+            <element signature="e#16204#16262#0" />
+            <element signature="e#16388#16424#0" />
+            <element signature="e#16759#16845#0" />
+            <element signature="e#16955#16971#0" />
           </folding>
         </state>
       </provider>

@@ -1,3 +1,7 @@
+"""
+
+"""
+
 import os
 import gym
 import numpy as np
@@ -34,9 +38,6 @@ class DDPG:
                  batch_size,
                  gamma,
                  tau,
-                 epsilon,
-                 epsilon_decay,
-                 epsilon_min,
                  save_graph):
 
         self.state_dim = state_dim
@@ -48,10 +49,6 @@ class DDPG:
         self.buffer_size = int(buffer_size)
         self.batch_size = int(batch_size)
         self.tau = tau
-
-        self.epsilon = epsilon
-        self.epsilon_decay = epsilon_decay
-        self.epsilon_min = epsilon_min
 
         # tf session
         # config = tf.compat.v1.ConfigProto()
@@ -114,9 +111,13 @@ class DDPG:
                 y[i] = rewards[i]
             else:
                 y[i] = rewards[i] + self.gamma * q_next[i]
-        # print(y[0])
 
+        # print(y[16])
+        #
         # y = np.expand_dims(rewards, axis=1) + self.gamma * q_next * (1-np.expand_dims(dones, axis=1))  # batch_size x 1
+        # print(y[16])
+        #
+        # quit()
 
         # train critic
         self.Critic.train(states, actions, y)
@@ -168,6 +169,8 @@ class ActorNet:
 
         self.train_op = self.optimizer.apply_gradients(zip(self.grads, self.actor_params))
         # self.train_op = self.optimizer.apply_gradients(zip(self.normalized_grads, self.actor_params))
+
+        # self.sess.run(tf.initialize_all_variables())
 
     def create_net(self, state_dim, action_dim, action_range, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
@@ -247,6 +250,8 @@ class CriticNet:
         self.action_grads = tf.gradients(self.model.outputs, self.a_in)  # dQ/da
         self.loss_hist = []
 
+        # self.sess.run(tf.initialize_all_variables())
+
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
         A = Input(shape=(action_dim,))
@@ -283,8 +288,8 @@ class CriticNet:
         return q
 
     def train(self, states, actions, y):
-        loss = self.model.train_on_batch(x=[states, actions], y=y)
-        # self.model.fit(x=[states, actions], y=y, verbose=0)
+        # loss = self.model.train_on_batch(x=[states, actions], y=y)
+        loss = self.model.fit(x=[states, actions], y=y, verbose=0)
         self.loss_hist.append(loss)
 
     def get_action_grads(self, states, actions):
@@ -306,7 +311,9 @@ class CriticNet:
 
         # print(action_grads)
 
-        action_grads /= states.shape[0]
+        # action_grads /= states.shape[0]
+
+        # print(action_grads[0])
 
         return action_grads
 
