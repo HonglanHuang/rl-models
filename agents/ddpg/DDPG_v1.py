@@ -1,3 +1,7 @@
+"""
+grads/batch size
+"""
+
 import os
 import gym
 import numpy as np
@@ -34,9 +38,6 @@ class DDPG:
                  batch_size,
                  gamma,
                  tau,
-                 epsilon,
-                 epsilon_decay,
-                 epsilon_min,
                  save_graph):
 
         self.state_dim = state_dim
@@ -48,10 +49,6 @@ class DDPG:
         self.buffer_size = int(buffer_size)
         self.batch_size = int(batch_size)
         self.tau = tau
-
-        self.epsilon = epsilon
-        self.epsilon_decay = epsilon_decay
-        self.epsilon_min = epsilon_min
 
         # tf session
         # config = tf.compat.v1.ConfigProto()
@@ -299,8 +296,6 @@ class CriticNet:
             self.a_in: actions
         })[0]
 
-        # print(action_grads)
-
         action_grads /= states.shape[0]
 
         return action_grads
@@ -379,9 +374,6 @@ if __name__ == '__main__':
                  batch_size=32,
                  gamma=0.95,
                  tau=0.01,
-                 epsilon=1.0,
-                 epsilon_decay=0.995,
-                 epsilon_min=0.01,
                  save_graph=False)
     try:
         agent.restore(ACTOR_PATH, CRITIC_PATH)

@@ -1,4 +1,7 @@
 import tensorflow as tf
+from tensorflow.keras import Model, Sequential
+from tensorflow.keras.layers import Dense, ReLU, Input, concatenate
+from tensorflow.keras.optimizers import Adam
 import gym
 import numpy as np
 from collections import deque, namedtuple
@@ -51,12 +54,12 @@ class DQN(object):
         self.loss_hist = []
 
     def build_net(self, state_dim, action_dim, fc1_units, fc2_units):
-        model = tf.keras.Sequential([
-                tf.keras.layers.Dense(fc1_units, input_shape=(state_dim, ), activation=tf.nn.relu),
-                tf.keras.layers.Dense(fc2_units, activation=tf.nn.relu),
-                tf.keras.layers.Dense(action_dim)
+        model = Sequential([
+                Dense(fc1_units, input_shape=(state_dim, ), activation='relu'),
+                Dense(fc2_units, activation='relu'),
+                Dense(action_dim)
                 ])
-        model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.01),
+        model.compile(optimizer=Adam(lr=0.01),
               loss='mse')
 
         return model
@@ -66,7 +69,9 @@ class DQN(object):
         self.replay_buffer.append(transition)
 
     def act(self, state):
-        state = state[np.newaxis,:]  # adding at batch dimension for passing forward the network
+        if len(state.shape) < 2:
+            state = state[np.newaxis,:]  # adding at batch dimension for passing forward the network
+        # epsilon greedy
         if np.random.uniform() < self.eps:
             action = random.choice(np.arange(self.action_dim))
         else:
@@ -78,7 +83,7 @@ class DQN(object):
     def learn(self, soft_update):
         # sample from buffer
         batch = random.sample(self.replay_buffer, self.batch_size)
-        transitions = zip(*batch)
+        transitions = zip(*batch)  # make (st, at, st+1, rt) batches to (si), (ai), (st+1), (ri) tuples
 
         states, actions, rewards, next_states, dones = map(np.array, transitions)
 

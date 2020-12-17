@@ -72,8 +72,8 @@ class wolp_agent(DDPG):
         if save_graph:
             tf.summary.FileWriter('./logs/', self.sess.graph)
 
-    def act(self, state):
-        proto_action = self.Actor.forward(state)
+    def select_action(self, state):
+        proto_action = super().act(state)
         # print(proto_action)
 
         # epsilon-greedy
@@ -135,11 +135,8 @@ class wolp_agent(DDPG):
         # return best_action.item()
         return best_action.flatten()
 
-    def store(self, state, action, reward, next_state, done):
-        self.Buffer.store(state, action, reward, next_state, done)
-
     def learn(self):
-        states, actions, rewards, next_states, dones = self.Buffer.sample(self.batch_size)
+        states, actions, rewards, next_states, dones = super.Buffer.sample(self.batch_size)
 
         # get next actions from target actor
         next_proto_actions = self.Target_Actor.forward(next_states)  # batch_size x action_dim
@@ -169,7 +166,7 @@ class wolp_agent(DDPG):
         # print(q_next.shape)
         # print(dones.shape)
 
-        self.Critic.train(states, actions, y)
+        super().Critic.train(states, actions, y)
 
         proto_actions = self.Actor.forward(states)
         action_grads = self.Critic.get_action_grads(states, proto_actions)  # actor are updated wrt to proto action
@@ -177,14 +174,6 @@ class wolp_agent(DDPG):
 
         self.Target_Actor.soft_update(self.Actor.model)
         self.Target_Critic.soft_update(self.Critic.model)
-
-    def save(self, actor_path, critic_path):
-        self.Actor.save_weights(actor_path)
-        self.Critic.save_weights(critic_path)
-
-    def restore(self, actor_path, critic_path):
-        self.Actor.load_weights(actor_path)
-        self.Critic.load_weights(critic_path)
 
 if __name__ == '__main__':
     # # make model dirs
@@ -228,7 +217,7 @@ if __name__ == '__main__':
             # if len(agent.Buffer.memory) < agent.buffer_size:
             #     action = np.random.choice(env.action_space.n)
             # else:
-            action = agent.act(state, 2)
+            action = agent.select_action(state, 2)
 
             # action = agent.act(state, 2)
             next_state, reward, done, _ = env.step(action)

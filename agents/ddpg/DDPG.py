@@ -1,5 +1,4 @@
 """
-
 """
 
 import os
@@ -78,10 +77,7 @@ class DDPG:
         raw_action = self.Actor.forward(state)
 
         noise = max(self.epsilon, 0) * OU.noise()
-
-        # print(raw_action)
         noised_action = raw_action + noise
-        # noised_action = raw_action + OU(x=raw_action)
         noised_action = np.clip(noised_action.flatten(), env.action_space.low, env.action_space.high)
         # print(noised_action)
 
@@ -90,8 +86,8 @@ class DDPG:
         # noised_action = np.clip(noised_action.flatten(), env.action_space.low, env.action_space.high)
         # print(noised_action)
 
-        return noised_action
-        # return raw_action.flatten()
+        # return noised_action
+        return raw_action.flatten()
 
     def store(self, state, action, reward, next_state, done):
         self.Buffer.store(state, action, reward, next_state, done)
@@ -174,12 +170,10 @@ class ActorNet:
 
     def create_net(self, state_dim, action_dim, action_range, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
-        x = Dense(fc1_units)(S)
-        x = ReLU()(x)
+        x = Dense(fc1_units, activation='relu')(S)
         # x = BatchNormalization()(x)
         # x = ReLU()(x)
-        x = Dense(fc2_units)(x)
-        x = ReLU()(x)
+        x = Dense(fc2_units, activation='relu')(x)
         # x = BatchNormalization()(x)
         # x = ReLU()(x)
         x = Dense(action_dim,
@@ -255,17 +249,15 @@ class CriticNet:
     def create_net(self, state_dim, action_dim, fc1_units, fc2_units):
         S = Input(shape=(state_dim,))
         A = Input(shape=(action_dim,))
-        s = Dense(fc1_units)(S)
+        s = Dense(fc1_units, activation='relu')(S)
         s = ReLU()(s)
         # s = BatchNormalization()(s)  # batch norm after processing state
         # s = ReLU()(s)
         # s = Dense(fc2_units, activation='relu')(s)
-        a = Dense(fc1_units)(A)
-        a = ReLU()(a)
+        a = Dense(fc1_units, activation='relu')(A)
         x = concatenate([s, a], axis=1)   # concat transformed state and raw action as input for fc2
         # x = ReLU()(x)
-        x = Dense(fc2_units)(x)
-        x = ReLU()(x)
+        x = Dense(fc2_units, activation='relu')(x)
         # x = BatchNormalization()(x) # batch norm after processing state
         # x = ReLU()(x)
         out = Dense(1,
@@ -308,12 +300,6 @@ class CriticNet:
             self.s_in: states,
             self.a_in: actions
         })[0]
-
-        # print(action_grads)
-
-        # action_grads /= states.shape[0]
-
-        # print(action_grads[0])
 
         return action_grads
 
@@ -391,9 +377,6 @@ if __name__ == '__main__':
                  batch_size=32,
                  gamma=0.95,
                  tau=0.01,
-                 epsilon=1.0,
-                 epsilon_decay=0.995,
-                 epsilon_min=0.01,
                  save_graph=False)
     try:
         agent.restore(ACTOR_PATH, CRITIC_PATH)
